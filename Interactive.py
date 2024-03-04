@@ -3,7 +3,6 @@ import numpy as np
 from rayoptics.environment import *
 from rayoptics.optical import opticalmodel
 
-
 isdark = False
 import plotly.graph_objects as go
 from scipy.spatial import *
