@@ -14,5 +14,5 @@ pyqt5
 qdarkstyle
 ipython
 traitlets
-jax==0.2.19
-jaxlib==0.1.70+cuda110 -f https://storage.googleapis.com/jax-releases/jax_releases.html
+jax
+jaxlib
