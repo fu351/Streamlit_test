@@ -55,7 +55,10 @@ sm.add_surface([-20.4942, 41.2365])
   if bcol[0].button("Run"):
     exec(code)
   if bcol[1].button("Reset"):
-    st.session_state.opm = OpticalModel()
+    opm = OpticalModel()
+    st.session_state.opm = opm 
+    st.session_state.sm = opm['seq_model']
+    st.rerun()
     
   opm.update_model()
   data = visualize_lens(sm, radius = 7)
