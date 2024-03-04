@@ -10,7 +10,7 @@ packaging
 json_tricks
 deprecation
 ipywidgets
-pyqt5
+#pyqt5
 qdarkstyle
 ipython
 traitlets
