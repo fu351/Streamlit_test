@@ -14,9 +14,13 @@ from visualize.lens import visualize_lens
 from visualize.rays import visualize_rays
 import plotly.graph_objects as go
 import numpy as np
+
+  
+  
 def main():
   if 'opm' not in st.session_state or 'sm' not in st.session_state:
         st.session_state.opm = OpticalModel()
+        
         st.session_state.sm = st.session_state.opm['seq_model']
   
   opm = st.session_state.opm   
@@ -39,15 +43,18 @@ def main():
 
   init_gap = col1.slider("Initial Gap", min_value = 0, max_value = 10, value = 1)
   sm.gaps[0].thi= init_gap
+  ray_option = col1.selectbox("Ray Option", ["Paralell", "Point Source"])
   
-  
-  if col1.button("Reset"):
-    st.session_state.opm = OpticalModel()
+
     
     
   opm.update_model()
   data = visualize_lens(sm, radius = 7)
-  data.extend(visualize_rays(sm,0,6,wv,x_offsets=np.linspace(-3,3,5), y_offsets=np.linspace(-5,1,5), color = "red"))
+  if ray_option == "Paralell":
+    data.extend(visualize_rays(sm,0,6,wv,x_offsets=np.linspace(-3,3,5), y_offsets=np.linspace(-3,3,5), color = "red"))
+  else:
+    ray_mult = col1.slider("Ray Multiplier", min_value = 0.0, max_value = 1.0, value = 0.5)
+    data.extend(visualize_rays(sm,np.pi * ray_mult,6,wv, color = "red", num_rays = 5))
   figure = go.Figure(data = data)
   figure.update_scenes(aspectmode='data')
   # Update the size of the chart
@@ -57,7 +64,11 @@ def main():
       height=500,
   )
   col2.plotly_chart(figure)
-  
+  if col1.button("Reset"):
+    opm = OpticalModel()
+    st.session_state.opm = opm 
+    st.session_state.sm = opm['seq_model']
+    st.rerun()
 
 if __name__ == "__main__":
   main()

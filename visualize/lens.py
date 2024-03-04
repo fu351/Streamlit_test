@@ -32,6 +32,7 @@ def visualize_lens(sm, N = 100 , radius = 2):
     lens = False
     #Goes through each surface and collects mesh data
     for surf_num in range(1, sm.get_num_surfaces()-1):
+      lens = False
       prev_mesh = mesh
       prev_vmesh = volume_mesh
       volume_mesh = [[],[],[]]
