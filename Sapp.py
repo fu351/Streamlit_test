@@ -16,7 +16,6 @@ import numpy as np
 # create a new optical model and set up aliases
 def main():
   st.set_page_config(layout="wide")
-  st.title("Lens Visualisation - Code Dev")
   
   if 'opm' not in st.session_state or 'sm' not in st.session_state:
         st.session_state.opm = OpticalModel()
@@ -54,22 +53,30 @@ sm.add_surface([-20.4942, 41.2365])
   bcol = st.columns(10)
   if bcol[0].button("Run"):
     exec(code)
+  
+  ray_option = col1.selectbox("Ray Option", ["Paralell", "Point Source"])
   if bcol[1].button("Reset"):
     opm = OpticalModel()
     st.session_state.opm = opm 
     st.session_state.sm = opm['seq_model']
     st.rerun()
+
+    
     
   opm.update_model()
   data = visualize_lens(sm, radius = 7)
-  data.extend(visualize_rays(sm,0,6,wv,x_offsets=np.linspace(-3,3,5), y_offsets=np.linspace(-3,3,5), color = "red"))
+  if ray_option == "Paralell":
+    data.extend(visualize_rays(sm,0,6,wv,x_offsets=np.linspace(-3,3,5), y_offsets=np.linspace(-3,3,5), color = "red"))
+  else:
+    ray_mult = col1.slider("Ray Multiplier", min_value = 0.0, max_value = 1.0, value = 0.5)
+    data.extend(visualize_rays(sm,np.pi * ray_mult,6,wv, color = "red", num_rays = 5))
   figure = go.Figure(data = data)
   figure.update_scenes(aspectmode='data')
   # Update the size of the chart
   figure.update_layout(
     autosize=True,
     showlegend = False,
-    height=350,
+    height=500,
     margin=dict(
         l=0,  # left margin
         r=0,  # right margin
