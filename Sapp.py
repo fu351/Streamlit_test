@@ -6,7 +6,7 @@ from jax import grad, jit, vmap
 from jax.numpy import sqrt, copysign, sin
 jax.config.update("jax_enable_x64", True)
 import numpy as np
-from rayoptics.environment import
+from rayoptics.environment import *
 from jax import lax
 isdark = False
 import plotly.graph_objects as go
