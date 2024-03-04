@@ -17,7 +17,8 @@ import numpy as np
 def main():
   st.set_page_config(layout="wide")
   st.title("Lens Visualisation - Code Dev")
-  if 'opm' or 'sm' not in st.session_state:
+  
+  if 'opm' not in st.session_state or 'sm' not in st.session_state:
         st.session_state.opm = OpticalModel()
         st.session_state.sm = st.session_state.opm['seq_model']
   

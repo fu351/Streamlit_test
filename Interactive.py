@@ -15,14 +15,13 @@ from visualize.rays import visualize_rays
 import plotly.graph_objects as go
 import numpy as np
 def main():
-  st.title("Lens Visualisation - Simple Interactive")
-  if 'lenses' not in st.session_state:
-        st.session_state.lenses = []
-
-  opm = OpticalModel()
-  sm  = opm['seq_model']
+  if 'opm' not in st.session_state or 'sm' not in st.session_state:
+        st.session_state.opm = OpticalModel()
+        st.session_state.sm = st.session_state.opm['seq_model']
+  
+  opm = st.session_state.opm   
+  sm  = st.session_state.sm
   osp = opm['optical_spec']
-  lenses = st.session_state.lenses
   
   # define field specs
   osp['pupil'] = PupilSpec(osp, key=['object', 'pupil'], value=12.5)
@@ -36,14 +35,16 @@ def main():
   lenR = col1.text_input("Lens Radius", value = 12.5)
   n = col1.text_input("Diffraction Index", value = 1.0)
   if col1.button("Add Lens"):
-        lens = [float(lenR), float(n)]
-        lenses.append(lens)
-
-  for lens in lenses:
-      sm.add_surface(lens)
+        sm.add_surface([float(lenR), float(n)])
 
   init_gap = col1.slider("Initial Gap", min_value = 0, max_value = 10, value = 1)
-  sm.gaps[0].thi= init_gap  
+  sm.gaps[0].thi= init_gap
+  
+  
+  if col1.button("Reset"):
+    st.session_state.opm = OpticalModel()
+    
+    
   opm.update_model()
   data = visualize_lens(sm, radius = 7)
   data.extend(visualize_rays(sm,0,6,wv,x_offsets=np.linspace(-3,3,5), y_offsets=np.linspace(-5,1,5), color = "red"))
