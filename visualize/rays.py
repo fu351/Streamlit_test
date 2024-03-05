@@ -6,7 +6,7 @@ from scipy.spatial import *
 from rayoptics.raytr.trace import *
 
 
-def visualize_rays(sm=None, max_angle=None, radius=10, wv= 400.5618, x_offsets=[0], y_offsets=[0], num_rays= 1, color = 'green'):
+def visualize_rays(sm=None, max_angle=None, radius=10, wv= 400.5618, x_offsets=[0], y_offsets=[0], num_rays= 1, color = 'green', visibility = True):
     """
     This function visualizes rays in an optical system by creating a 3D scatter plot for each ray.
 
@@ -18,7 +18,8 @@ def visualize_rays(sm=None, max_angle=None, radius=10, wv= 400.5618, x_offsets=[
     x_offsets (list): The x-coordinates of the starting points of the rays.
     y_offsets (list): The y-coordinates of the starting points of the rays.
     num_rays (int): The number of rays to visualize from each starting point. The total number of rays at each starting point is num_rays^2.
-
+    visibility (bool): visibility of the rays
+    
     Returns:
     data (list): A list of plotly Scatter3d objects, one for each ray in the system.
 
@@ -74,10 +75,10 @@ def visualize_rays(sm=None, max_angle=None, radius=10, wv= 400.5618, x_offsets=[
                             j += 1
 
                     #Visualizes Ray
-                    data.append(go.Scatter3d(x=x, y=z, z=y, mode='lines', line=dict(color=color, width=1), opacity=0.5, name =f"Ray {idx}"))
+                    data.append(go.Scatter3d(x=x, y=z, z=y, mode='lines', line=dict(color=color, width=1), opacity=0.5, name =f"Ray {idx}", visible = visibility))
 
                     #Visualises intersection point of rays
-                    data.append(go.Scatter3d(x=x[::], y= z[::], z=y[::], mode = 'markers', marker=dict(color='black', size=1), showlegend = False))
+                    data.append(go.Scatter3d(x=x[::], y= z[::], z=y[::], mode = 'markers', marker=dict(color='black', size=1), showlegend = False , visibile = visibility))
 
                     idx += 1
     return data
